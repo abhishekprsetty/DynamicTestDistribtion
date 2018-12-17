@@ -1,7 +1,5 @@
 package testrecord;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -27,7 +25,7 @@ public class CsvTestDataLoader implements TestDataLoader {
 
   @Override
   public void filterData(String platform, String testResult) {
-    throw new NotImplementedException();
+    throw new UnsupportedOperationException();
   }
 
   @Override

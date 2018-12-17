@@ -1,18 +1,23 @@
 package service;
 
-import testrecord.TestData;
-import testrecord.TestDataLoader;
-
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class Method1 implements Method {
+import testrecord.TestData;
+import testrecord.TestDataLoader;
+
+public class SimpleTestDistributor extends TestDistributor {
+
+  public SimpleTestDistributor(TestDataLoader testDataLoader) {
+    super(testDataLoader);
+  }
 
   @Override
-  public TestDevices run(TestDevices testDevices, TestDataLoader testDataLoader) {
+  public Map<TestDevice, List<Long>> getDistribution(TestDevices testDevices) {
 
     Map<String, Integer> testTimeMap = new HashMap<>();
     Map<String, Integer> testDataMap = new HashMap<>();
@@ -34,7 +39,7 @@ public class Method1 implements Method {
       testTimeMap = this.sortMapOrderBy(testTimeMap, "ASC");
       String shortestTimeDeviceName = testTimeMap.keySet().toArray()[0].toString();
       // Put this caseId (longest test time) into testDevice (shortest test time)
-      testDevices.getDevice(shortestTimeDeviceName).addTestCase(entry.getKey());
+      testDevices.getDevice(shortestTimeDeviceName).addTestCase(Long.parseLong(entry.getKey()));
       // Add this caseId's test time into testDevice's expected test time
       testDevices.getDevice(shortestTimeDeviceName).addExpectedTestSecs(entry.getValue());
       // Add caseId's test time on testDevice
@@ -49,9 +54,12 @@ public class Method1 implements Method {
               shortestTimeDeviceName,
               testDevices.getDevice(shortestTimeDeviceName).getExpectedTestSecs(),
               testDevices.getDevice(shortestTimeDeviceName).getTestCases());
-      System.out.println(info);
     }
-    return null;
+    Map<TestDevice, List<Long>> resultMap = new HashMap<TestDevice, List<Long>>();
+    for (String id : testTimeMap.keySet()) {
+      resultMap.put(testDevices.getDevice(id), testDevices.getDevice(id).getTestCases());
+    }
+    return resultMap;
   }
 
   public Map<String, Integer> sortMapOrderBy(Map<String, Integer> map, String orderBy) {
@@ -76,5 +84,10 @@ public class Method1 implements Method {
                     Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 
     return sortedMap;
+  }
+
+  @Override
+  public Map<TestDevice, List<Long>> getDistribution(List<String> deviceNames, int maxExecution) {
+    return getDistribution(new TestDevices(deviceNames, maxExecution));
   }
 }

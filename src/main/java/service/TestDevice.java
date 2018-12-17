@@ -6,7 +6,7 @@ import java.util.List;
 public class TestDevice {
 
   private String deviceName;
-  private List<String> testCases;
+  private List<Long> testCases;
   private Integer expectedTestSecs;
   private Integer maxExecutedSecs;
 
@@ -25,15 +25,15 @@ public class TestDevice {
     this.deviceName = deviceName;
   }
 
-  public List<String> getTestCases() {
+  public List<Long> getTestCases() {
     return testCases;
   }
 
-  public void setTestCases(List<String> testCases) {
+  public void setTestCases(List<Long> testCases) {
     this.testCases = testCases;
   }
 
-  public void addTestCase(String testCase) {
+  public void addTestCase(Long testCase) {
     this.testCases.add(0, testCase);
   }
 
@@ -55,5 +55,9 @@ public class TestDevice {
 
   public void setMaxExecutedSecs(Integer maxExecutedSecs) {
     this.maxExecutedSecs = maxExecutedSecs;
+  }
+
+  public String toString() {
+    return deviceName + " (" + expectedTestSecs + " seconds)";
   }
 }

@@ -1,16 +1,24 @@
 package service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class TestDevices {
 
   private Map<String, TestDevice> testDeviceMap;
 
-  public TestDevices(int deviceNumber, int maxExecutedSecs) {
+  public TestDevices(int numberOfDevices, int maxExecutedSecs) {
     testDeviceMap = new HashMap<>();
-    for (int index = 0; index < deviceNumber; index++) {
+    for (int index = 0; index < numberOfDevices; index++) {
       String deviceName = String.format("%d", index + 1);
+      this.addDevice(deviceName, new TestDevice(deviceName, maxExecutedSecs));
+    }
+  }
+
+  public TestDevices(List<String> deviceNames, int maxExecutedSecs) {
+    testDeviceMap = new HashMap<>();
+    for (String deviceName : deviceNames) {
       this.addDevice(deviceName, new TestDevice(deviceName, maxExecutedSecs));
     }
   }
